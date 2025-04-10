@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.example.api.entity.JournalEntry;
 import com.example.api.entity.UserEntry;
@@ -20,12 +21,16 @@ public class JournalEntryService {
     @Autowired
     private UserService userService;
 
-    public void saveEntry(JournalEntry journalEntry, String userName) {
-        UserEntry user = userService.findByUserName(userName);
-        JournalEntry saved = journalEntryRepository.save(journalEntry);
-
-        user.getJournalEntries().add(saved);
-        userService.saveEntry(user);
+    @Transactional
+    public void saveEntry(JournalEntry journalEntry, String userName) throws Exception {
+        try {
+            UserEntry user = userService.findByUserName(userName);
+            JournalEntry saved = journalEntryRepository.save(journalEntry);
+            user.getJournalEntries().add(saved);
+            userService.saveEntry(user);
+        } catch (Exception e) {
+            throw new Exception(e);
+        }
     }
 
     public void saveEntry(JournalEntry journalEntry) {

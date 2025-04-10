@@ -12,7 +12,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import lombok.Data;
 import lombok.NonNull;
 
-@Document(collection = "users")
+@Document(collection = "userEntries")
 @Data
 public class UserEntry {
     @Id
@@ -27,4 +27,6 @@ public class UserEntry {
 
     @DBRef
     private List<JournalEntry> journalEntries = new ArrayList<>();
+
+    private List<String> roles;
 }

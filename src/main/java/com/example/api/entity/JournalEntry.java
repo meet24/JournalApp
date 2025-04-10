@@ -10,7 +10,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
 
-@Document(collection = "JournalApp")
+@Document(collection = "journalEntries")
 @Data
 @NoArgsConstructor
 public class JournalEntry {
