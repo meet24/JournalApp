@@ -1,6 +1,5 @@
 package com.example.api.service;
 
-import java.lang.reflect.Array;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -21,13 +20,13 @@ public class UserService {
 
     private static final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(); 
 
-    public void saveEntry(UserEntry user) {
+    public void saveNewUser(UserEntry user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setRoles(Arrays.asList("USER"));
         userRepository.save(user);
     }
 
-    public void saveNewUser(UserEntry user) {
+    public void saveUser(UserEntry user) {
         userRepository.save(user);
     }
 
