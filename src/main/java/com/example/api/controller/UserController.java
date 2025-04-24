@@ -1,9 +1,11 @@
 package com.example.api.controller;
 
 import org.springframework.web.bind.annotation.RestController;
+import com.example.api.apiResponse.WeatherResponse;
 import com.example.api.entity.UserEntry;
 import com.example.api.repository.UserRepository;
 import com.example.api.service.UserService;
+import com.example.api.service.WeatherService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 
 @RestController
 @RequestMapping("/user")
@@ -24,15 +27,19 @@ public class UserController {
     @Autowired
     private UserRepository userRepository;
 
-    // @GetMapping("/")
-    // public List<UserEntry> getAllUsers() {
-    //     return userService.getAll();
-    // }
+    @Autowired
+    private WeatherService weatherService;
 
-    // @PostMapping("/")
-    // public void createUser(@RequestBody UserEntry user) {
-    //     userService.saveEntry(user);
-    // }
+    @GetMapping    
+    public ResponseEntity<?> greeting() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        WeatherResponse weatherResponse = weatherService.getWeather("Windsor");
+        String greeting = "";
+        if(weatherResponse != null) {
+            greeting = ", Weather feels like " + weatherResponse.getCurrent().getFeelslike();
+        }
+        return new ResponseEntity<>("Hello " + authentication.getName() + greeting , HttpStatus.OK);
+    }
 
     @PutMapping
     public ResponseEntity<?> updateUser(@RequestBody UserEntry userEntry) {
